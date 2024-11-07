@@ -14,7 +14,7 @@ const { currentUsername, isLoggedIn } = storeToRefs(useUserStore());
       <h2 v-if="isLoggedIn" class="welcome-message">Let your light, light up the world ⭐️ {{ currentUsername }}!</h2>
       <h3 v-else>Log in to access safety features.</h3>
       <p class="intro-description">Use Noor to stay connected, and ensure your safety. Start a check-in, send an alert, or message trusted contacts.</p>
-      <div class="button-container">
+      <div class="button-container" v-if="isLoggedIn">
         <RouterLink :to="{ name: 'CheckIn' }">
           <button class="nav-button">Check-In</button>
         </RouterLink>
@@ -35,10 +35,11 @@ const { currentUsername, isLoggedIn } = storeToRefs(useUserStore());
         </RouterLink>
       </div>
     </header>
-    <section class="post-section">
+    <section class="post-section" v-if="isLoggedIn">
       <h2>Latest Posts</h2>
       <PostListComponent />
     </section>
+    <p v-else class="login-prompt">Please log in to see updates from your trusted contacts.</p>
   </main>
 </template>
 
@@ -90,6 +91,7 @@ h1 {
   background-color: #3498db;
   color: white;
   border: none;
+  transition: background-color 0.3s;
 }
 
 .alert-button {
@@ -97,7 +99,7 @@ h1 {
 }
 
 .nav-button:hover {
-  opacity: 0.9;
+  background-color: #2980b9;
 }
 
 .post-section {
@@ -111,5 +113,11 @@ h2 {
   font-size: 2em;
   color: #2c3e50;
   margin-bottom: 1em;
+}
+
+.login-prompt {
+  text-align: center;
+  font-size: 1.2em;
+  color: #7f8c8d;
 }
 </style>
