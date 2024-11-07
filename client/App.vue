@@ -3,53 +3,74 @@ import { useToastStore } from "@/stores/toast";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import { computed, onBeforeMount } from "vue";
-import { RouterLink, RouterView, useRoute } from "vue-router";
+import { RouterLink, RouterView, useRoute, useRouter } from "vue-router";
 
 const currentRoute = useRoute();
 const currentRouteName = computed(() => currentRoute.name);
 const userStore = useUserStore();
 const { isLoggedIn } = storeToRefs(userStore);
 const { toast } = storeToRefs(useToastStore());
+const router = useRouter();
 
+// Update the session before mounting the app to check if the user is logged in
 onBeforeMount(async () => {
   try {
     await userStore.updateSession();
-  } catch {
-    // User is not logged in
+  } catch (error) {
+    console.error("Error updating session:", error);
   }
 });
+
+const logout = async () => {
+  try {
+    await userStore.logoutUser();
+    await router.push({ name: "Login" });
+  } catch (error) {
+    console.error("Error during logout or navigation:", error);
+  }
+};
 </script>
 
 <template>
   <header>
     <nav>
       <div class="title">
-        <img src="@/assets/images/logo.svg" alt="App Logo" />
+        <img src="@/assets/images/logo.svg" alt="Noor Logo" />
         <RouterLink :to="{ name: 'Home' }">
           <h1>Noor</h1>
         </RouterLink>
       </div>
       <ul>
         <li>
-          <RouterLink :to="{ name: 'Home' }" :class="{ underline: currentRouteName == 'Home' }"> Home </RouterLink>
+          <RouterLink :to="{ name: 'Home' }" :class="{ underline: currentRouteName == 'Home' }">Home</RouterLink>
         </li>
         <li v-if="isLoggedIn">
-          <RouterLink :to="{ name: 'Settings' }" :class="{ underline: currentRouteName == 'Settings' }"> Settings </RouterLink>
+          <RouterLink :to="{ name: 'Alerting' }" :class="{ underline: currentRouteName == 'Alerting' }">Alerting</RouterLink>
         </li>
         <li v-if="isLoggedIn">
-          <RouterLink :to="{ name: 'Profile' }" :class="{ underline: currentRouteName == 'Profile' }"> Profile </RouterLink>
+          <RouterLink :to="{ name: 'Monitoring' }" :class="{ underline: currentRouteName == 'Monitoring' }">Monitoring</RouterLink>
         </li>
-        <li v-else>
-          <RouterLink :to="{ name: 'Login' }" :class="{ underline: currentRouteName == 'Login' }"> Login </RouterLink>
-          <RouterLink :to="{ name: 'Register' }" :class="{ underline: currentRouteName == 'Register' }" style="margin-left: 0.5em"> Register </RouterLink>
+        <li v-if="isLoggedIn">
+          <RouterLink :to="{ name: 'Messaging' }" :class="{ underline: currentRouteName == 'Messaging' }">Messaging</RouterLink>
+        </li>
+        <li v-if="isLoggedIn">
+          <RouterLink :to="{ name: 'Settings' }" :class="{ underline: currentRouteName == 'Settings' }">Settings</RouterLink>
+        </li>
+        <li v-if="isLoggedIn">
+          <RouterLink :to="{ name: 'Profile' }" :class="{ underline: currentRouteName == 'Profile' }">Profile</RouterLink>
+        </li>
+        <li v-if="!isLoggedIn">
+          <RouterLink :to="{ name: 'Login' }" :class="{ underline: currentRouteName == 'Login' }">Login</RouterLink>
+          <RouterLink :to="{ name: 'Register' }" :class="{ underline: currentRouteName == 'Register' }" style="margin-left: 0.5em">Register</RouterLink>
+        </li>
+        <li v-if="isLoggedIn">
+          <button @click="logout" class="logout-button">Logout</button>
         </li>
       </ul>
     </nav>
-    <transition name="fade">
-      <article v-if="toast !== null" class="toast" :class="toast.style">
-        <p>{{ toast.message }}</p>
-      </article>
-    </transition>
+    <article v-if="toast !== null" class="toast" :class="toast.style">
+      <p>{{ toast.message }}</p>
+    </article>
   </header>
   <RouterView />
   <footer>Created by Manasa Kudumu</footer>
@@ -58,18 +79,16 @@ onBeforeMount(async () => {
 <style scoped>
 @import "./assets/toast.css";
 
-* {
-  box-sizing: border-box;
-}
-
 nav {
   padding: 1em 2em;
-  background: linear-gradient(135deg, #84a9ac, #3b6978);
+  background-color: #95b3a8ff;
   display: flex;
   align-items: center;
-  color: white;
-  border-bottom: 2px solid #3b6978;
-  font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
+h1 {
+  font-size: 2em;
+  margin: 0;
 }
 
 .title {
@@ -79,80 +98,41 @@ nav {
 }
 
 img {
-  height: 2.5em;
-  border-radius: 50%;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  height: 2em;
 }
 
-h1 {
-  font-size: 1.8em;
-  margin: 0;
-  color: white;
+a {
+  font-size: large;
+  color: black;
+  text-decoration: none;
 }
 
 ul {
   list-style-type: none;
   margin-left: auto;
   display: flex;
-  gap: 1em;
   align-items: center;
+  flex-direction: row;
+  gap: 1em;
 }
 
-a {
-  font-size: 1.1em;
-  color: white;
-  text-decoration: none;
-  transition: color 0.3s ease;
+.logout-button {
+  background: none;
+  border: none;
+  color: black;
+  cursor: pointer;
+  font-size: large;
+  padding: 0.5em;
 }
 
-a:hover {
-  color: #3b6978;
+footer {
+  padding: 3em 4em;
+  margin-top: 1em;
+  background-color: #95b3a8ff;
+  text-align: center;
 }
 
 .underline {
   text-decoration: underline;
-}
-
-.toast {
-  padding: 1em;
-  border-radius: 0.5em;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  margin: 1em;
-  transition: all 0.5s ease;
-}
-
-footer {
-  padding: 2em;
-  margin-top: 1em;
-  background-color: #3b6978;
-  color: white;
-  text-align: center;
-  font-size: 1em;
-}
-
-/* Transition styles */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-}
-
-@media (max-width: 768px) {
-  nav {
-    padding: 1em;
-    flex-direction: column;
-  }
-
-  ul {
-    flex-direction: column;
-    gap: 0.5em;
-  }
-
-  h1 {
-    font-size: 1.5em;
-  }
 }
 </style>
