@@ -2,9 +2,24 @@
 import PostListComponent from "@/components/Post/PostListComponent.vue";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
-import { RouterLink } from "vue-router";
+import { onMounted, watch } from "vue";
+import { RouterLink, useRouter } from "vue-router";
 
 const { currentUsername, isLoggedIn } = storeToRefs(useUserStore());
+const userStore = useUserStore();
+const router = useRouter();
+
+// Check if user session is active on component mount
+onMounted(async () => {
+  await userStore.updateSession();
+});
+
+// Watch for changes in login state
+watch(isLoggedIn, (newValue: any) => {
+  if (!newValue) {
+    void router.push({ name: "Login" });
+  }
+});
 </script>
 
 <template>
@@ -12,7 +27,6 @@ const { currentUsername, isLoggedIn } = storeToRefs(useUserStore());
     <header class="header">
       <h1>Welcome to Noor!</h1>
       <h2 v-if="isLoggedIn" class="welcome-message">Let your light, light up the world ⭐️ {{ currentUsername }}!</h2>
-      <h3 v-else>Log in to access safety features.</h3>
       <p class="intro-description">Use Noor to stay connected, and ensure your safety. Start a check-in, send an alert, or message trusted contacts.</p>
       <div class="button-container" v-if="isLoggedIn">
         <RouterLink :to="{ name: 'CheckIn' }">
