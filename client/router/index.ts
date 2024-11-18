@@ -86,7 +86,7 @@ const router = createRouter({
     },
   ],
 });
-/*
+
 router.beforeEach((to, from) => {
   const { isLoggedIn } = storeToRefs(useUserStore());
 
@@ -94,5 +94,5 @@ router.beforeEach((to, from) => {
     return { name: "Login" };
   }
 });
-*/
+
 export default router;
