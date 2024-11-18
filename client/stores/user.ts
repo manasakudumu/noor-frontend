@@ -21,16 +21,23 @@ export const useUserStore = defineStore(
     };
 
     const loginUser = async (username: string, password: string) => {
-      await fetchy("/api/login", "POST", { body: { username, password } });
-      await updateSession();
+      try {
+        await fetchy("/api/login", "POST", { body: { username, password } });
+        await updateSession();
+      } catch (error) {
+        console.error("Login failed:", error);
+        throw new Error("Login failed. Please check your credentials.");
+      }
     };
 
     const updateSession = async () => {
       try {
         const { username } = await fetchy("/api/session", "GET", { alert: false });
         currentUsername.value = username;
-      } catch {
+      } catch (error) {
+        console.error("Session expired:", error);
         currentUsername.value = "";
+        throw new Error("Session expired. Please log in again.");
       }
     };
 
