@@ -11,11 +11,13 @@ const router = useRouter();
 
 // Check if user session is active on component mount
 onMounted(async () => {
+  console.log("Checking session...");
   await userStore.updateSession();
+  console.log("Session updated. Is logged in:", isLoggedIn.value);
 });
 
-// Watch for changes in login state
-watch(isLoggedIn, (newValue: any) => {
+watch(isLoggedIn, (newValue) => {
+  console.log("Login state changed:", newValue);
   if (!newValue) {
     void router.push({ name: "Login" });
   }
@@ -26,9 +28,9 @@ watch(isLoggedIn, (newValue: any) => {
   <main>
     <header class="header">
       <h1>Welcome to Noor!</h1>
-      <h2 v-if="isLoggedIn" class="welcome-message">Let your light, light up the world ⭐️ {{ currentUsername }}!</h2>
+      <h2 v-if="isLoggedIn" class="welcome-message">Let your light, light up the world ⭐️ {{ currentUsername || "User" }}!</h2>
       <p class="intro-description">Use Noor to stay connected, and ensure your safety. Start a check-in, send an alert, or message trusted contacts.</p>
-      <div class="button-container" v-if="isLoggedIn">
+      <div class="button-container">
         <RouterLink :to="{ name: 'CheckIn' }">
           <button class="nav-button">Check-In</button>
         </RouterLink>
@@ -57,6 +59,9 @@ watch(isLoggedIn, (newValue: any) => {
   </main>
 </template>
 
+<style scoped>
+/* Styling remains unchanged */
+</style>
 <style scoped>
 main {
   display: flex;

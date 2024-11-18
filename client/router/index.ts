@@ -87,9 +87,6 @@ const router = createRouter({
   ],
 });
 
-/**
- * Navigation guards to prevent user from accessing unauthorized pages.
- */
 router.beforeEach((to, from) => {
   const { isLoggedIn } = storeToRefs(useUserStore());
 
