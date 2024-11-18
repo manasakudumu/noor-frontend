@@ -86,9 +86,29 @@ nav {
   align-items: center;
 }
 
-h1 {
-  font-size: 2em;
+body {
+  font-family: "Playfair Display", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+h1 {
+  font-family: "Playfair Display", sans-serif;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0;
+  padding: 0.5em 0;
+}
+
+/* Paragraphs and Text */
+p {
+  font-family: "Playfair Display", sans-serif;
+  font-size: 1em;
+  margin: 0.5em 0;
 }
 
 .title {
