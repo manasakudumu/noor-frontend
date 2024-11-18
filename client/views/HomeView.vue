@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import PostListComponent from "@/components/Post/PostListComponent.vue";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import { onMounted, watch } from "vue";
@@ -28,8 +27,7 @@ watch(isLoggedIn, (newValue) => {
   <main>
     <header class="header">
       <h1>Welcome to Noor!</h1>
-      <h2 v-if="isLoggedIn" class="welcome-message">Let your light, light up the world ⭐️ {{ currentUsername || "User" }}!</h2>
-      <p class="intro-description">Use Noor to stay connected, and ensure your safety. Start a check-in, send an alert, or message trusted contacts.</p>
+      <p class="intro-description">Use Noor to stay connected and ensure your safety. Start a check-in, send an alert, or message trusted contacts.</p>
       <div class="button-container">
         <RouterLink :to="{ name: 'CheckIn' }">
           <button class="nav-button">Check-In</button>
@@ -51,11 +49,6 @@ watch(isLoggedIn, (newValue) => {
         </RouterLink>
       </div>
     </header>
-    <section class="post-section" v-if="isLoggedIn">
-      <h2>Latest Posts</h2>
-      <PostListComponent />
-    </section>
-    <p v-else class="login-prompt">Please log in to see updates from your trusted contacts.</p>
   </main>
 </template>
 
