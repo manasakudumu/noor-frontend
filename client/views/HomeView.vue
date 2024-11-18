@@ -29,9 +29,6 @@ watch(isLoggedIn, (newValue) => {
       <h1>Welcome to Noor!</h1>
       <p class="intro-description">Use Noor to stay connected and ensure your safety. Start a check-in, send an alert, or message trusted contacts.</p>
       <div class="button-container">
-        <RouterLink :to="{ name: 'CheckIn' }">
-          <button class="nav-button">Check-In</button>
-        </RouterLink>
         <RouterLink :to="{ name: 'Messaging' }">
           <button class="nav-button">Messages</button>
         </RouterLink>
@@ -43,9 +40,6 @@ watch(isLoggedIn, (newValue) => {
         </RouterLink>
         <RouterLink :to="{ name: 'Posting' }">
           <button class="nav-button">Post an Update</button>
-        </RouterLink>
-        <RouterLink :to="{ name: 'Profile' }">
-          <button class="nav-button">My Profile</button>
         </RouterLink>
       </div>
     </header>
@@ -100,18 +94,18 @@ h1 {
   font-size: 1.1em;
   border-radius: 5px;
   cursor: pointer;
-  background-color: #3498db;
+  background-color: #95b3a8ff;
   color: white;
   border: none;
   transition: background-color 0.3s;
 }
 
 .alert-button {
-  background-color: red;
+  background-color: rgb(244, 110, 110);
 }
 
 .nav-button:hover {
-  background-color: #2980b9;
+  background-color: rgb(110, 152, 137);
 }
 
 .post-section {

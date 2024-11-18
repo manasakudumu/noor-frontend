@@ -61,7 +61,7 @@ onBeforeMount(async () => {
 .emergency-button {
   padding: 1em 2em;
   font-size: 1.5em;
-  background-color: #ff4c4c;
+  background-color: #e87878;
   color: white;
   border: none;
   border-radius: 5px;
